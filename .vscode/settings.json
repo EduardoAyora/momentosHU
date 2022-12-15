@@ -1,0 +1,16 @@
+{
+  "files.associations": {
+    "*.ejs": "html",
+    "iostream": "cpp",
+    "ostream": "cpp",
+    "numbers": "cpp",
+    "ios": "cpp",
+    "__locale": "cpp",
+    "functional": "cpp",
+    "typeinfo": "cpp",
+    "fstream": "cpp",
+    "vector": "cpp",
+    "string": "cpp",
+    "type_traits": "cpp"
+  },
+}
