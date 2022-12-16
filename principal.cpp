@@ -48,22 +48,6 @@ std::string substring(std::string const &s)
   }
 }
 
-void shuffle(int *arr, size_t n)
-{
-  if (n > 1)
-  {
-    size_t i;
-    srand(time(NULL));
-    for (i = 0; i < n - 1; i++)
-    {
-      size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
-      int t = arr[j];
-      arr[j] = arr[i];
-      arr[i] = t;
-    }
-  }
-}
-
 int main(int argc, char *argv[])
 {
   namedWindow("Imagen", WINDOW_AUTOSIZE);
@@ -71,43 +55,25 @@ int main(int argc, char *argv[])
   namedWindow("Binaria", WINDOW_AUTOSIZE);
 
   vector<string> listaMomentosHU = {};
-  string path = "./imagenes-entrenamiento";
+  string path = "./ShapeDataset";
 
   // indice de imagenes aleatorias
   int numberOfImages = 34533;
-  int i;
   int todasImagenes[numberOfImages];
-  for (i = 0; i < numberOfImages; i++)
+  for (int i = 0; i < numberOfImages; i++)
   {
     todasImagenes[i] = i;
   }
-  shuffle(todasImagenes, numberOfImages);
 
-  int numeroImagenesEntrenamientoYTest = 50;
-  int imagenesEntrenamientoYTest[numeroImagenesEntrenamientoYTest];
-  for (i = 0; i < numeroImagenesEntrenamientoYTest; i++)
-  {
-    imagenesEntrenamientoYTest[i] = todasImagenes[i];
-  }
+  int numeroImagenesEntrenamientoYTest = 1700;
 
   int counter = 0;
   for (const auto &entry : fs::directory_iterator(path))
   {
-    if (counter == numberOfImages)
+    if (counter == numeroImagenesEntrenamientoYTest)
       break;
     counter += 1;
-    // verificar si esta es una imagen escogida aleatoriamente
-    bool esImagenEscogida = false;
-    for (int i = 0; i < numeroImagenesEntrenamientoYTest; i++)
-    {
-      if (imagenesEntrenamientoYTest[i] == counter)
-      {
-        bool esImagenEscogida = true;
-        break;
-      }
-    }
-    if(!esImagenEscogida) break;
-    
+
     Mat colorImage = imread(entry.path());
     Mat binaryImage;
     Mat grayImage;
@@ -152,7 +118,6 @@ int main(int argc, char *argv[])
   //   cout << "Es círculo " << endl;
   // }
 
-  cout << "llega" << endl;
   ofstream myFile("entrenamiento.csv");
   for (int i = 0; i < numeroImagenesEntrenamientoYTest; i++)
   {

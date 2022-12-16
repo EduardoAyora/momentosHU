@@ -23,13 +23,23 @@ dummy_y = np_utils.to_categorical(encoded_Y)
 def baseline_model():
 	# create model
 	model = Sequential()
-	model.add(Dense(8, input_dim=inputDimensions, activation='relu'))
-	model.add(Dense(3, activation='softmax'))
+	model.add(Dense(16, input_dim=inputDimensions, activation='relu'))
+	model.add(Dense(8, activation='relu'))
+	# model.add(Dense(9, activation='softmax'))
+	model.add(Dense(9, activation='sigmoid'))
 	# Compile model
 	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 	return model
 
-estimator = KerasClassifier(build_fn=baseline_model, epochs=200, batch_size=5, verbose=0)
-kfold = KFold(n_splits=2, shuffle=True)
+model=baseline_model
+estimator = KerasClassifier(build_fn=model, epochs=200, batch_size=5, verbose=0)
+kfold = KFold(n_splits=10, shuffle=True)
 results = cross_val_score(estimator, X, dummy_y, cv=kfold)
 print("Baseline: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
+
+model_json = model().to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
+model().save_weights("model.h5")
+print("Saved model to disk")
